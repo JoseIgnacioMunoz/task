@@ -22,3 +22,24 @@ Una vez instalado Django, ahora crearemos la estructura de directorios inicial i
 ```bash
 django-admin startproject taskSite
 ```
+He tenido un problema con la rama local y la remota porque cuando quise hacer el push, tenía cambios hechos en la rama remota que no tenía en local y viceversa. Así que tuve que hacer un merge entre las dos ramas: 
+```bash
+git config pull.rebase false
+```
+```bash
+git pull origin main
+```
+
+Continuando con el proyecto, ahora lo que debemos hacer es modificar el archivo settings.py para que contenga las siguientes sentencias:
+
+```python
+TIME_ZONE = ‘Europe/Madrid’
+
+LANGUAGE_CODE = ‘es-es’
+
+STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / 'static'
+
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+```
