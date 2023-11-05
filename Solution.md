@@ -43,3 +43,22 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 ```
+
+En el mismo archivo, enlazamos la base de datos db.sqlite3: 
+
+```python
+DATABASES = {
+
+'default': {
+'ENGINE': 'django.db.backends.sqlite3',
+'NAME': BASE_DIR / 'db.sqlite3',
+
+}
+}
+```
+
+A continuación, aseguramos que el esquema de la base de datos esté actualizado con los modelos y cambios en el esquema del proyecto con: 
+
+```bash
+python manage.py migrate
+```
