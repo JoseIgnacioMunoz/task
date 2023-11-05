@@ -94,33 +94,17 @@ INSTALLED_APPS = [
 Para crear un modelo, dirígete hacia models.py y pon lo siguiente: 
 
 ```python
-from django.conf import settings
-
 from django.db import models
 
-from django.utils import timezone
+class Task(models.Model):
 
-class Post(models.Model):
-
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    title = models.CharField(max_length=200)
-
-    text = models.TextField()
-
-    created_date = models.DateTimeField(default=timezone.now)
-
-    published_date = models.DateTimeField(blank=True, null=True)
-
-    def publish(self):
-
-        self.published_date = timezone.now()
-
-        self.save()
-
+    nomTarea = models.CharField(max_length=250)
+    descrip = models.CharField(max_length=250)
+    hecha = models.BooleanField(default=False)
+    
     def __str__(self):
 
-        return self.title
+        return self.nomTarea
 ```
 
 Acabamos de cambiar el modelo, así que vamos a registrar los cambios en la base de datos: 
@@ -132,16 +116,16 @@ python manage.py makemigrations task
 Después ejecutamos el migrate:
 
 ```bash
-python manage.py migrate blog
+python manage.py migrate task
 ```
 
 Modificamos el archivo admin.py: 
 
 ```python
 from django.contrib import admin
-from .models import Post
+from .models import Task
 
-admin.site.register(Post)
+admin.site.register(Task)
 ```
 
 Creamos la cuenta de administrador: 
@@ -150,3 +134,72 @@ Creamos la cuenta de administrador:
 python manage.py createsuperuser
 ```
 
+Comprobamos que lo hemos hecho bien navegando hacia : http://127.0.0.1:8000/admin/
+-Nota: comprobar que en ALLOWED_HOSTS de settings está así ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.pythonanywhere.com']
+
+## URLs
+
+Para que Django redirija todo lo que entre a 'http://127.0.0.1:8000/' hacia task.urls, escribimos en el archivo taskSite/urls.py lo siguiente:
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('task.urls')),
+]
+```
+
+A continuación, creamos otro archivo vacío urls.py en el directorio task de nuestro proyecto y escribimos lo siguiente:
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+ path('', views.post_list, name='post_list'),
+]
+```
+
+## Views
+
+En el archivo views.py de /task, ponemos lo siguiente para importar las vistas: 
+
+```python
+from django.shortcuts import render
+from .models import Task
+
+def post_list(request):
+    tareas = Task.objects.all()
+    return render(request, 'task/tareas.html', {'task': task})
+```
+
+## Templates
+
+Para crear los templates, antes organizamos la estructura de carpetas: task/templates/task
+
+Después, dentro del último directorio task creado, creamos un archivo tareas.html:
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tareas J Ignacio Muñoz Sotelo</title>
+</head>
+<body>
+
+    {%for tarea in tareas%}
+        Nombre: {{tarea.nomTarea}} <br>
+        Descripcion: {{tarea.descrip}} <br>
+        Hecho: {{tarea.hecha}} <br>
+
+        {%empty%}
+        No hay tareas para realizar.
+    {%endfor%}
+    
+</body>
+</html>
+```
