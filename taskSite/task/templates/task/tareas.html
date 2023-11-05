@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tareas J Ignacio Muñoz Sotelo</title>
+</head>
+<body>
+
+    {%for tarea in tareas%}
+        Nombre: {{tarea.nomTarea}} <br>
+        Descripcion: {{tarea.descrip}} <br>
+        Hecho: {{tarea.hecha}} <br>
+
+        {%empty%}
+        No hay tareas para realizar.
+    {%endfor%}
+    
+</body>
+</html>
