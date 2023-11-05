@@ -62,3 +62,91 @@ A continuación, aseguramos que el esquema de la base de datos esté actualizado
 ```bash
 python manage.py migrate
 ```
+
+ Arrancamos el servidor: 
+
+ ```bash
+python manage.py runserver
+ ```
+
+ Comprobamos navegando hacia http://localhost:8000
+
+Creamos la estructura de la aplicación task
+
+```bash
+python manage.py startapp task
+```
+
+Como hemos creado la aplicación task, vamos a registrarla en el archivo settings.py de taskSite:
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'task',
+]
+```
+
+Para crear un modelo, dirígete hacia models.py y pon lo siguiente: 
+
+```python
+from django.conf import settings
+
+from django.db import models
+
+from django.utils import timezone
+
+class Post(models.Model):
+
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    title = models.CharField(max_length=200)
+
+    text = models.TextField()
+
+    created_date = models.DateTimeField(default=timezone.now)
+
+    published_date = models.DateTimeField(blank=True, null=True)
+
+    def publish(self):
+
+        self.published_date = timezone.now()
+
+        self.save()
+
+    def __str__(self):
+
+        return self.title
+```
+
+Acabamos de cambiar el modelo, así que vamos a registrar los cambios en la base de datos: 
+
+```bash
+python manage.py makemigrations task
+```
+
+Después ejecutamos el migrate:
+
+```bash
+python manage.py migrate blog
+```
+
+Modificamos el archivo admin.py: 
+
+```python
+from django.contrib import admin
+from .models import Post
+
+admin.site.register(Post)
+```
+
+Creamos la cuenta de administrador: 
+
+```bash
+python manage.py createsuperuser
+```
+
