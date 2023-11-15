@@ -195,7 +195,7 @@ Después, dentro del último directorio task creado, creamos un archivo tareas.h
         Nombre: {{tarea.nomTarea}} <br>
         Descripcion: {{tarea.descrip}} <br>
         Hecho: {{tarea.hecha}} <br>
-
+        <br>
         {%empty%}
         No hay tareas para realizar.
     {%endfor%}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Tarea</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Detalles de Tarea</h1>
+
+    <p>Nombre: {{ tarea.nomTarea }}</p>
+    <p>Descripción: {{ tarea.descrip }}</p>
+    <p>Hecho: {{ tarea.hecha }}</p>
+
+    <a href="{% url 'post_list' %}">Nueva tarea</a>
+</body>
+</html>
