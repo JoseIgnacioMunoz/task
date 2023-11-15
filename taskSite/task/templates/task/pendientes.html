@@ -46,7 +46,7 @@
     <h1>Tareas Pendientes</h1>
     {% for task in pendientes %}
         {% if not task.hecha %}
-        <a href="{% url 'detalle_tarea_pendiente' pk=task.pk %}">Nombre: {{ task.nomTarea }}</a><br>
+        <a href="{% url 'detalle_tarea' pk=task.pk %}">Nombre: {{ task.nomTarea }}</a><br>
             Descripcion: {{ task.descrip }} <br>
         {% endif %}
     {% empty %}

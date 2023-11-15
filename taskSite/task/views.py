@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 from .forms import TaskForm
 from django.views import View
@@ -70,6 +70,44 @@ class DetalleTareaView(View):
     def get(self, request, pk):
         tarea = Task.objects.get(pk=pk)
         return render(request, self.template_name, {'tarea': tarea})
+    
+class EditarTareaView(View):
+    template_name = 'task/editarTarea.html'
+
+    def get(self, request, pk):
+        tarea = get_object_or_404(Task, pk=pk)
+        form = TaskForm(instance=tarea)
+        return render(request, self.template_name, {'tarea': tarea, 'form': form})
+
+    def post(self, request, pk):
+        tarea = get_object_or_404(Task, pk=pk)
+        form = TaskForm(request.POST, instance=tarea)
+
+        if form.is_valid():
+            form.save()
+            return redirect('detalle_tarea', pk=pk)
+
+        return render(request, self.template_name, {'tarea': tarea, 'form': form})
+    
+class EliminarTareaView(View):
+    template_name = 'task/eliminarTarea.html'
+
+    def get(self, request, pk):
+        # Obtener la tarea específica que se va a eliminar usando el identificador de la tarea (pk)
+        tarea = get_object_or_404(Task, pk=pk)
+        
+        # Renderizar la plantilla eliminarTarea.html y pasar la tarea como contexto
+        return render(request, self.template_name, {'tarea': tarea})
+
+    def post(self, request, pk):
+        # Obtener la tarea específica que se va a eliminar usando el identificador de la tarea (pk)
+        tarea = get_object_or_404(Task, pk=pk)
+        
+        # Llamar al método delete() en el objeto de tarea para eliminar la tarea de la base de datos
+        tarea.delete()
+        
+        # Redirigir al usuario a la lista de tareas (post_list) después de eliminar la tarea
+        return redirect('post_list')
 
 """
 class TaskList(View):

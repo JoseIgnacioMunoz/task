@@ -37,6 +37,8 @@
     <p>Descripción: {{ tarea.descrip }}</p>
     <p>Hecho: {{ tarea.hecha }}</p>
 
+    <a href="{% url 'editarTarea' tarea.id %}">Editar tarea</a><br>
+    <a href="{% url 'eliminarTarea' tarea.id %}">Eliminar tarea</a><br>
     <a href="{% url 'post_list' %}">Nueva tarea</a>
 </body>
 </html>
